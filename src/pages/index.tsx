@@ -1,4 +1,4 @@
-export * from './auth/login-register'
+export * from './auth/login'
 export * from './main/add-group-task'
 export * from './main/add-task'
 export * from './main/calender'

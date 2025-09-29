@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { AddGroupTask, AddTask, Calender, Home, MyInfo } from "@/pages";
+import NotFound from "./pages/main/not-found";
+import Login from "./pages/auth/login";
 
 
 export default createBrowserRouter([
@@ -13,7 +15,7 @@ export default createBrowserRouter([
       { path: "my-info", Component: MyInfo }
     ],
   },
-  {
-    path: "login",
-  },
+  { path: "login", Component: Login },
+  { path: "*", Component: NotFound }
 ]);
+
