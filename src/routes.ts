@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { AddGroupTask, AddTask, Calender, Home, MyInfo } from "./pages";
+import { AddGroupTask, AddTask, Calender, Home, MyInfo } from "@/pages";
 
 
 export default createBrowserRouter([
