@@ -1,15 +1,16 @@
 import { createBrowserRouter } from "react-router";
-import App from "./App";
+import { AddGroupTask, AddTask, Calender, Home, MyInfo } from "./pages";
+
 
 export default createBrowserRouter([
   {
     path: "/",
     children: [
-      { index: true, Component: App },
-      { path: "calender" },
-      { path: "add-task" },
-      { path: "add-group-task" },
-      { path: "my-info" }
+      { index: true, Component: Home },
+      { path: "calender", Component: Calender },
+      { path: "add-task", Component: AddTask },
+      { path: "add-group-task" , Component: AddGroupTask},
+      { path: "my-info", Component: MyInfo }
     ],
   },
   {

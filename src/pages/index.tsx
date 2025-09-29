@@ -1,0 +1,6 @@
+export * from './auth/login-register'
+export * from './main/add-group-task'
+export * from './main/add-task'
+export * from './main/calender'
+export * from './main/home'
+export * from './main/my-info'
