@@ -1,4 +1,27 @@
 @import "tailwindcss";
+@font-face {
+  font-family: LexendDeca;
+  src: url(./assets/fonts/LexendDeca-Bold.ttf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: LexendDeca;
+  src: url(./assets/fonts/LexendDeca-Light.ttf);
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: LexendDeca;
+  src: url(./assets/fonts/LexendDeca-Medium.ttf);
+  font-weight:400;
+}
+
+@font-face {
+  font-family: LexendDeca;
+  src: url(./assets/fonts/LexendDeca-Regular.ttf);
+  font-weight: 300;
+}
 
 body {
   margin: 0;
@@ -6,4 +29,24 @@ body {
   max-width: 375px;
   margin: auto;
   min-height: 100vh;
+  color: #24252C;
+  font-family: LexendDeca;
+  font-weight: 300;
+}
+
+
+.font-bold{
+  font-weight: 600;
+}
+
+.font-light{
+  font-weight: 200;
+}
+
+.font-reqular{
+  font-weight: 400;
+}
+
+.font-medium{
+  font-weight: 300;
 }
