@@ -1,6 +1,8 @@
 import http from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import person from '@/assets/img/person.svg'
+import Input from "@/components/form/input";
 
 type Inputs = {
   email: string;
@@ -33,12 +35,24 @@ export default function Login() {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input defaultValue="test" {...register("email")} />
+    <div>
+      <img src={person} alt="person" className="mx-auto py-20"/>
 
-      <input type="password" {...register("password", { required: true })} />
-
-      <button type="submit">Submit</button>
-    </form>
+      <h2 className="font-bold text-xl text-center leading-6"> Task Management & <br/> To-Do List </h2>
+      <p className="text-[#6E6A7C] text-center text-sm leading-4 mt-3">
+        This productive tool is designed to help
+        <br/>
+        you better manage your task 
+        <br />
+        project-wise conveniently!
+      </p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="px-8 flex flex-col justify-center gap-6 mt-6">
+            <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
+            <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
+            <button type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold">Let’s Start</button>
+          </div>
+        </form>
+    </div>
   );
 }
