@@ -13,11 +13,7 @@ type Inputs = {
 };
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const result = await mutation.mutateAsync(data);
@@ -29,14 +25,11 @@ export default function Login() {
       const res = await http.post(AUTH_API.LOIGN, data);
       return res.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Welcome")
-      console.log("Signup success:", data);
     },
     onError: (error:any) => {
-      console.log()
       toast.error(error?.response?.data?.error_code)
-      console.error("Signup error:", error?.error_code);
     },
   });
 
