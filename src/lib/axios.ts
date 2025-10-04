@@ -1,10 +1,11 @@
+import { AUTH_API } from "@/services/api";
 import axios from "axios";
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_SUPABASE_URL,
   timeout: 10000,
   headers: {
-    "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+    apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
     "Content-Type": "application/json",
   },
 });
@@ -63,12 +64,11 @@ http.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
+        const res = await axios.post( AUTH_API.REFRESH_TOKEN,
           { refresh_token: refreshToken },
           {
             headers: {
-              "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
               "Content-Type": "application/json",
             },
           }
