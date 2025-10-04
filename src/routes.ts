@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router";
 import Login from "./pages/auth/login";
 import Dashboard from "./pages/main/dashboard";
 import NotFound from "./pages/main/not-found";
+import Signup from "./pages/auth/signup";
 
 export default createBrowserRouter([
   {
@@ -11,6 +12,7 @@ export default createBrowserRouter([
     Component: Layout,
     children: [
       { index: true, Component: Login },
+      { path: "signup", Component: Signup },
 
       { index: false, Component: Home },
       { path: "dashboard", Component: Dashboard },
