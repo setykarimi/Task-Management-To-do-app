@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ArrowRight3 } from "iconsax-reactjs";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useNavigate } from 'react-router';
 
 type Inputs = {
   email: string;
@@ -14,24 +15,34 @@ type Inputs = {
 
 export default function Login() {
   const { register, handleSubmit } = useForm<Inputs>();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const result = await mutation.mutateAsync(data);
-    console.log(result)
+    onLogin(data);
   };
 
-  const mutation = useMutation({
+  const { mutateAsync: onLogin, isPending } = useMutation({
     mutationFn: async (data: Inputs) => {
       const res = await http.post(AUTH_API.LOIGN, data);
       return res.data;
     },
-    onSuccess: () => {
-      toast.success("Welcome")
+    onSuccess: (result) => {
+      if (result?.access_token) {
+        localStorage.setItem("access_token", result.access_token);
+      }
+      if (result?.refresh_token) {
+        localStorage.setItem("refresh_token", result.refresh_token);
+      }
+      toast.success("Welcome");
+      navigate("/dashboard");
+
     },
-    onError: (error:any) => {
-      toast.error(error?.response?.data?.error_code)
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error_code);
     },
   });
+
+
 
   return (
     <div>
@@ -49,7 +60,7 @@ export default function Login() {
           <div className="px-8 flex flex-col justify-center gap-6 mt-6">
             <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
             <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
-            <button type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2">
+            <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
               <span className='block m-auto'>Login</span> 
               <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
             </button>
