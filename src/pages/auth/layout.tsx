@@ -1,18 +1,7 @@
-import { useEffect } from "react";
 import person from "@/assets/img/person.svg";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 
 export default function AuthLayout() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      // اگر کاربر قبلاً لاگین کرده، بفرستش به dashboard
-      navigate("/dashboard", { replace: true });
-    }
-  }, [navigate]);
-
   return (
     <div>
       <img src={person} alt="person" className="mx-auto py-20" />

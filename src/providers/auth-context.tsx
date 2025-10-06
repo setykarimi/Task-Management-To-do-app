@@ -92,6 +92,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   },[access_token])
 
 
+  // @@@______________ Check for no token ______________@@@
+  useEffect(() => {
+    if (!token) {
+      if(location.pathname.startsWith("/dashboard")) {
+        navigate("/login", { replace: true });
+      }
+    } else {
+      if(location.pathname === "/login") {
+        navigate("/dashboard", { replace: true });
+      }
+    }
+  }, [token, location.pathname, navigate]);
+
+
+
   // @@@______________ Fetch user Profile ______________@@@
   useEffect(()=>{
     if(user?.sub)
