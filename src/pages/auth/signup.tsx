@@ -26,6 +26,7 @@ export default function Signup() {
     },
     onSuccess: () => {
       toast.success("Confirmation Send Check your email please");
+
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.error_code);
@@ -33,11 +34,10 @@ export default function Signup() {
   });
 
 
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="px-8 flex flex-col justify-center gap-6 mt-6">
+        <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
           <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
           <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
