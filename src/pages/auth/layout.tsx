@@ -6,7 +6,7 @@ export default function AuthLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("user_token");
+    const token = localStorage.getItem("access_token");
     if (token) {
       // اگر کاربر قبلاً لاگین کرده، بفرستش به dashboard
       navigate("/dashboard", { replace: true });
