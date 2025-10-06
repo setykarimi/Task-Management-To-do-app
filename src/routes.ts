@@ -1,5 +1,5 @@
 import Layout from "@/components/layout";
-import { AddGroupTask, AddTask, Calender,  MyInfo } from "@/pages";
+import { AddGroupTask, AddTask, Calender, Profile } from "@/pages";
 import { createBrowserRouter } from "react-router";
 import Login from "./pages/auth/login";
 import Dashboard from "./pages/main/dashboard";
@@ -26,7 +26,7 @@ export default createBrowserRouter([
       { path: "calender", Component: Calender },
       { path: "add-task", Component: AddTask },
       { path: "add-group-task", Component: AddGroupTask },
-      { path: "my-info", Component: MyInfo },
+      { path: "profile", Component: Profile },
       { path: "*", Component: NotFound },
     ],
   },
