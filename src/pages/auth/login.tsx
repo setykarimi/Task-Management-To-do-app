@@ -29,13 +29,13 @@ export default function Login() {
     onSuccess: (result) => {
       if (result?.access_token) {
         localStorage.setItem("access_token", result.access_token);
+        http.defaults.headers.common.Authorization = `Bearer ${result.access_token}`;
       }
       if (result?.refresh_token) {
         localStorage.setItem("refresh_token", result.refresh_token);
       }
       toast.success("Welcome");
       navigate("/dashboard");
-
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.error_code);
@@ -45,30 +45,20 @@ export default function Login() {
 
 
   return (
-    <div>
-      <img src={person} alt="person" className="mx-auto py-20"/>
-
-      <h2 className="font-bold text-xl text-center leading-6"> Task Management & <br/> To-Do List </h2>
-      <p className="text-[#6E6A7C] text-center text-sm leading-4 mt-3">
-        This productive tool is designed to help
-        <br/>
-        you better manage your task 
-        <br />
-        project-wise conveniently!
-      </p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="px-8 flex flex-col justify-center gap-6 mt-6">
-            <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
-            <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
-            <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
-              <span className='block m-auto'>Login</span> 
-              <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
-            </button>
-          </div>
-        </form>
-        <Link to='/signup'>
-            <span className='text-center block text-xs mt-2 text-[#5F33E1]'>Don't have an account?</span>
-        </Link>
-    </div>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="px-8 flex flex-col justify-center gap-6 mt-6">
+          <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
+          <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
+          <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
+            <span className='block m-auto'>Login</span> 
+            <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
+          </button>
+        </div>
+      </form>
+      <Link to='/signup'>
+          <span className='text-center block text-xs mt-2 text-[#5F33E1]'>Don't have an account?</span>
+      </Link>
+    </>
   );
 }
