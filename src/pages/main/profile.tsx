@@ -1,7 +1,7 @@
 import Input from "@/components/form/input";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
-import { AUTH_API } from "@/services/api";
+import { AUTH_API, PROFILES_API } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -20,14 +20,14 @@ export const Profile = () => {
  const onSubmit: SubmitHandler<Inputs> = async (data) => {
   if (!user) return;
 
-  const postData = new FormData();
-  postData.append("id", user.sub);
-  postData.append("name", data.name);
 
-  // فایل را اضافه می‌کنیم (اولین فایل انتخاب شده)
-  if (data.avatar_url && data.avatar_url[0]) {
-    postData.append("avatar_url", data.avatar_url[0]);
+  const postData = {
+    id: user.sub,
+    name: data.name,
+    avatar_url: data.avatar_url[0]
   }
+
+ 
 
   if(!profile)
     onProfileCreate(postData);
@@ -35,8 +35,8 @@ export const Profile = () => {
 };
 
   const { mutateAsync: onProfileCreate, isPending: createProfilePendign } = useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await http.post(AUTH_API.PROFILE, data);
+    mutationFn: async (data: Inputs) => {
+      const res = await http.post(PROFILES_API.PROFILE, data);
       return res.data;
     },
     onSuccess: (result) => {
@@ -49,8 +49,8 @@ export const Profile = () => {
   });
 
   const { mutateAsync: onProfileUpdate, isPending: profileUpdatePending } = useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await http.patch(AUTH_API.PROFILE, data);
+    mutationFn: async (data: Inputs) => {
+      const res = await http.patch(PROFILES_API.PROFILE, data);
       return res.data;
     },
     onSuccess: (result) => {
