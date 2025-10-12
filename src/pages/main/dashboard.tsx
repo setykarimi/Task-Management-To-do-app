@@ -40,7 +40,6 @@ export default function Dashboard() {
 
   if (isPending) return <div>loading</div>;
 
-  console.log(data);
 
   return <div>
     {data?.map((task:ITask)=> <div>{task.title}</div>)}
