@@ -17,11 +17,7 @@ interface ITask {
 }
 
 export default function Dashboard() {
-  const {
-    mutateAsync: fetchTasks,
-    isPending,
-    data,
-  } = useMutation({
+  const { mutateAsync: fetchTasks, isPending, data } = useMutation({
     mutationFn: async () => {
       const res = await http.get(TASKS_API.TASKS);
       return res.data;
@@ -34,8 +30,23 @@ export default function Dashboard() {
     },
   });
 
+
+  const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
+    mutationFn: async () => {
+      const res = await http.get(TASKS_API.TASK_GROUP);
+      return res.data;
+    },
+    onSuccess: (result) => {
+      return result;
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error_code);
+    },
+  });
+
   useEffect(() => {
     fetchTasks();
+    fetchTaskGroup()
   }, []);
 
   if (isPending) return <div>loading</div>;
