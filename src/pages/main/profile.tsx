@@ -1,7 +1,7 @@
 import Input from "@/components/form/input";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
-import { AUTH_API, PROFILES_API } from "@/services/api";
+import { PROFILES_API } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -17,22 +17,19 @@ export const Profile = () => {
   const { register, handleSubmit } = useForm<Inputs>();
   const { user, profile } = useAuth()
 
- const onSubmit: SubmitHandler<Inputs> = async (data) => {
-  if (!user) return;
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!user) return;
 
+    const postData = {
+      id: user.sub,
+      name: data.name,
+      avatar_url: data.avatar_url[0]
+    }
 
-  const postData = {
-    id: user.sub,
-    name: data.name,
-    avatar_url: data.avatar_url[0]
-  }
-
- 
-
-  if(!profile)
-    onProfileCreate(postData);
-  else onProfileUpdate(postData);
-};
+    if(!profile)
+      onProfileCreate(postData);
+    else onProfileUpdate(postData);
+  };
 
   const { mutateAsync: onProfileCreate, isPending: createProfilePendign } = useMutation({
     mutationFn: async (data: Inputs) => {
