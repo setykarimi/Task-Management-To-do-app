@@ -1,6 +1,7 @@
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
+import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
@@ -10,23 +11,15 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
-type Inputs = {
-  user_id: string
-  title: string;
-  status: string;
-  group_id: string;
-  end_date: string;
-  start_date: string;
-  description: string;
-};
+
 
 
 export const AddTask = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit, formState: {errors} } = useForm<ITask>();
   const { user } = useAuth()
   const navigate = useNavigate()
   
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<ITask> = async (data) => {
     if(!user) return 
 
     const postData = {
@@ -43,7 +36,7 @@ export const AddTask = () => {
   };
 
   const { mutateAsync: onTaskCreate, isPending } = useMutation({
-    mutationFn: async (data: Inputs) => {
+    mutationFn: async (data: ITask) => {
       const res = await http.post(TASKS_API.TASKS, data);
       return res.data;
     },
@@ -81,11 +74,11 @@ export const AddTask = () => {
       <h1 className="text-center font-bold text-xl">Create Task</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
-          <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" />
-          <SelectBox label="Status" name="status" options={[{title: "Done", id: "done"}]} register={register} rules={{ required: true }} />
-          <SelectBox label="Group" name="group_id" options={taskGroups || []} register={register} rules={{ required: true }} />
-          <Input label="Start date" name="start_date" register={register} rules={{ required: true }} type="date" />
-          <Input label="End date" name="end_date" register={register} rules={{ required: true }} type="date" />
+          <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors} />
+          <SelectBox label="Status" name="status" options={[{title: "Done", id: "done"}]} register={register} rules={{ required: true }} errors={errors}/>
+          <SelectBox label="Group" name="group_id" options={taskGroups || []} register={register} rules={{ required: true }} errors={errors}/>
+          <Input label="Start date" name="start_date" register={register} rules={{ required: true }} type="date" errors={errors} />
+          <Input label="End date" name="end_date" register={register} rules={{ required: true }} type="date" errors={errors} />
           <Textarea label="Description" name="description" register={register} />
           <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
             <span className='block m-auto'>Submit</span> 

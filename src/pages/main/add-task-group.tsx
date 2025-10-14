@@ -14,7 +14,7 @@ type Inputs = {
 };
 
 export const AddTaskGroup = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit, formState: {errors} } = useForm<Inputs>();
   const { user } = useAuth()
   const navigate = useNavigate();
 
@@ -42,8 +42,8 @@ export const AddTaskGroup = () => {
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-center gap-6 mt-6">
-            <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" />
-            <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" />
+            <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors}/>
+            <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" errors={errors}/>
             <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
               <span className='block m-auto'>Add Project</span> 
               <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
