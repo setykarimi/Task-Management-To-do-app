@@ -14,7 +14,7 @@ const Input:FC<IProps> = ({register, label, name, type, rules})=> {
   const isPassword = type == "password"
 
   return (
-    <div className="bg-white p-3 rounded-xl flex flex-col shadow">
+    <div className="bg-white p-3.5 rounded-xl flex flex-col shadow">
         <label className="text-[#6E6A7C] text-xs mb-1">{label}</label>
         <div className="flex gap-1">
           <input className="outline-0 text-xs w-full" type={isPassword && showPass ? "text" : type} {...register(name, rules)} />

@@ -1,30 +1,67 @@
-import { type FC } from "react";
+import { useState, type FC } from "react";
+import { ArrowDown2 } from "iconsax-reactjs";
 
 interface IProps {
-  register: any;
+  register?: any;
   label: string;
   name: string;
   options: { id: string | number; title: string }[];
+  value?: string | number;
+  onChange?: (value: string | number) => void;
   rules?: any;
 }
 
-const SelectBox: FC<IProps> = ({ register, label, name, options, rules }) => {
+const CustomSelect: FC<IProps> = ({ label, name, options, value, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<string | number | undefined>(value);
+
+  const handleSelect = (val: string | number) => {
+    setSelected(val);
+    onChange?.(val);
+    setOpen(false);
+  };
+
   return (
-    <div className="bg-white p-3 rounded-xl flex flex-col shadow">
+    <div className="relative bg-white p-3 rounded-xl flex flex-col shadow">
       <label className="text-[#6E6A7C] text-xs mb-1">{label}</label>
-      <select
-        className="outline-0 text-xs w-full p-2 rounded-md border border-gray-200"
-        {...register(name, rules)}
+
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full text-xs bg-transparent outline-0 border-none cursor-pointer"
       >
-        <option value="">انتخاب کنید</option>
-        {options.map((opt) => (
-          <option key={opt.id} value={opt.id}>
-            {opt.title}
-          </option>
-        ))}
-      </select>
+        <span className={selected ? "text-gray-800" : "text-gray-400"}>
+          {selected
+            ? options.find((o) => o.id === selected)?.title
+            : `Select ${label}`}
+        </span>
+        <ArrowDown2
+          size="16"
+          className={`text-gray-500 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {open && (
+        <ul
+          className="absolute z-20 left-0 right-0 mt-10 bg-white shadow-lg rounded-lg border border-gray-100 max-h-40 overflow-y-auto"
+        >
+          {options.map((opt) => (
+            <li
+              key={opt.id}
+              onClick={() => handleSelect(opt.id)}
+              className={`px-3 py-2 text-xs cursor-pointer hover:bg-indigo-50 hover:text-indigo-600 transition ${
+                selected === opt.id ? "bg-indigo-100 text-indigo-600" : ""
+              }`}
+            >
+              {opt.title}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
 
-export default SelectBox;
+export default CustomSelect;
