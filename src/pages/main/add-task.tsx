@@ -4,6 +4,7 @@ import http from "@/lib/axios";
 import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -60,6 +61,13 @@ export const AddTask = () => {
       toast.error(error?.response?.data?.error_code);
     },
   });
+
+  useEffect(()=>{
+    fetchTaskGroup()
+  },[])
+
+  if(peindingTaskGroup)
+    return <div>loading</div>
 
   return (
     <div>
