@@ -70,7 +70,7 @@ export const Profile = () => {
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" />
           <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: true }} type="file" />
-          <button type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
+          <button disabled={createProfilePendign || profileUpdatePending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
             <span className='block m-auto'>Submit</span> 
           </button>
         </div>
