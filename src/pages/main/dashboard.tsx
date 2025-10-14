@@ -5,19 +5,19 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 interface ITask {
-  created_at: string
+  created_at: string;
   description: null | string;
-  end_date: string
-  group_id: number
-  id: number
-  start_date: string
-  status: string
-  title: string
-  user_id: string
+  end_date: string;
+  group_id: number;
+  id: number;
+  start_date: string;
+  status: string;
+  title: string;
+  user_id: string;
 }
 
 export default function Dashboard() {
-  const { mutateAsync: fetchTasks, isPending, data } = useMutation({
+  const { mutateAsync: fetchTasks, isPending, data: tasks } = useMutation({
     mutationFn: async () => {
       const res = await http.get(TASKS_API.TASKS);
       return res.data;
@@ -29,7 +29,6 @@ export default function Dashboard() {
       toast.error(error?.response?.data?.error_code);
     },
   });
-
 
   const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
     mutationFn: async () => {
@@ -46,13 +45,19 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchTasks();
-    fetchTaskGroup()
+    fetchTaskGroup();
   }, []);
 
-  if (isPending) return <div>loading</div>;
+  if (isPending || peindingTaskGroup) return <div>loading</div>;
 
-
-  return <div>
-    {data?.map((task:ITask)=> <div>{task.title}</div>)}
-    </div>;
+  return (
+    <div>
+      {taskGroups?.map((task: ITask) => (
+        <div>{task.title}</div>
+      ))}
+      {tasks?.map((task: ITask) => (
+        <div>{task.title}</div>
+      ))}
+    </div>
+  );
 }
