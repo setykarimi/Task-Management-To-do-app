@@ -56,7 +56,10 @@ export default function Dashboard() {
         <div>{task.title}</div>
       ))}
       {tasks?.map((task: ITask) => (
-        <div>{task.title}</div>
+        <div>
+          {task.title}
+          {task.end_date}
+        </div>
       ))}
     </div>
   );
