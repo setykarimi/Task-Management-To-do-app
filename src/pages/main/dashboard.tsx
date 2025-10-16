@@ -1,6 +1,8 @@
 import http from "@/lib/axios";
+import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
+import { Notification } from "iconsax-reactjs";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -17,9 +19,10 @@ interface ITask {
 }
 
 export default function Dashboard() {
-  const { mutateAsync: fetchTasks, isPending, data: tasks } = useMutation({
+  const { profile } = useAuth()
+  const { mutateAsync: fetchTasks, isPending, data: inprogressTasks } = useMutation({
     mutationFn: async () => {
-      const res = await http.get(TASKS_API.TASKS);
+      const res = await http.get(`${TASKS_API.TASKS}?status=eq.todo`);
       return res.data;
     },
     onSuccess: (result) => {
@@ -48,11 +51,44 @@ export default function Dashboard() {
     fetchTaskGroup();
   }, []);
 
-  if (isPending || peindingTaskGroup) return <div>loading</div>;
+  if (isPending || peindingTaskGroup || !profile) return <div>loading</div>;
 
   return (
     <div>
-      {taskGroups?.map((task: ITask) => (
+    <header>
+      <div className="flex items-center mb-4">
+        {/* <img src="" alt="avatar" /> */}
+        <div>
+          <span className="text-sm">Hello!</span>
+          <h3 className="text-lg font-bold">{profile[0]?.name}</h3>
+        </div>
+        <Notification className="ml-auto" size="21" variant="Bold" />
+      </div>
+    </header>
+    <section>
+     <div className="flex items-center"> 
+      <h4 className="font-bold text-lg">In Progress</h4> 
+      <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
+        {inprogressTasks.length}
+      </span>
+     </div>
+<div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
+        {inprogressTasks?.map((task: ITask) => (
+          <div
+            key={task.id}
+            className="bg-[#E7F3FF] p-4 rounded-xl w-56 flex-shrink-0"
+          >
+            <span className="text-[#6E6A7C] text-xs block">Office Project</span>
+            <span className="block font-medium">{task.title}</span>
+            <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white mt-2">
+              <div className="h-full w-1/2 bg-[#0087FF] rounded-full"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </section>
+      {/* {taskGroups?.map((task: ITask) => (
         <div>{task.title}</div>
       ))}
       {tasks?.map((task: ITask) => (
@@ -60,7 +96,7 @@ export default function Dashboard() {
           {task.title}
           {task.end_date}
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }
