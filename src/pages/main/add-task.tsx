@@ -27,7 +27,8 @@ export const AddTask = () => {
       title: data.title,
       description: data.description,
       status: data.status,
-      group_id: data.group_id,
+      group_id: data.group_id.split("-")[0],
+      group_name: data.group_id.split("-")[1],
       end_date: data.end_date,
       start_date: data.start_date,
     }
@@ -52,7 +53,10 @@ export const AddTask = () => {
   const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
     mutationFn: async () => {
       const res = await http.get(TASKS_API.TASK_GROUP);
-      return res.data;
+    return res.data.map((group: any) => ({
+      id: `${group.id}-${group.title}`,
+      title: group.title,
+    }));
     },
     onSuccess: (result) => {
       return result;
@@ -75,7 +79,7 @@ export const AddTask = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors} />
-          <SelectBox label="Status" name="status" options={[{title: "Done", id: "done"}]} register={register} rules={{ required: true }} errors={errors}/>
+          <SelectBox label="Status" name="status" options={[{title: "Done", id: "done"}, { title: "To do", id: 'todo'}, {title: "In progress", id: "inprogress"}]} register={register} rules={{ required: true }} errors={errors}/>
           <SelectBox label="Group" name="group_id" options={taskGroups || []} register={register} rules={{ required: true }} errors={errors}/>
           <Input label="Start date" name="start_date" register={register} rules={{ required: true }} type="date" errors={errors} />
           <Input label="End date" name="end_date" register={register} rules={{ required: true }} type="date" errors={errors} />
