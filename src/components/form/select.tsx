@@ -1,7 +1,7 @@
 import { useState, type FC, useRef, useEffect } from "react";
 import { ArrowDown2 } from "iconsax-reactjs";
 import type { FieldErrors } from "react-hook-form";
-import type { ITask } from "../types";
+import type { ITask, ITaskGroup } from "../types";
 
 interface IProps {
   register: any;
@@ -9,7 +9,7 @@ interface IProps {
   name: string;
   options: { id: string | number; title: string }[];
   rules?: any;
-   errors: FieldErrors<ITask>
+  errors: FieldErrors<ITask>
 }
 
 const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, errors }) => {
@@ -36,7 +36,7 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
   };
 
   return (
-    <div ref={dropdownRef} className={`relative bg-white p-3 rounded-xl flex flex-col shadow ${errors?.[name] && "border border-red-200 shadow-red-100"}`}>
+    <div ref={dropdownRef} className={`relative bg-white p-3 rounded-xl flex flex-col shadow ${errors?.[name as keyof ITask] && "border border-red-200 shadow-red-100"}`}>
       <label className="text-[#6E6A7C] text-xs mb-1">{label}</label>
 
       <input type="hidden" name={name} value={selected || ""} ref={ref} onBlur={onBlur} readOnly />
