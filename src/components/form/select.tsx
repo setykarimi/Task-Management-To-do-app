@@ -39,7 +39,6 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
     <div ref={dropdownRef} className={`relative bg-white p-3 rounded-xl flex flex-col shadow ${errors?.[name] && "border border-red-200 shadow-red-100"}`}>
       <label className="text-[#6E6A7C] text-xs mb-1">{label}</label>
 
-      {/* فیلد فانتوم برای اتصال به register */}
       <input type="hidden" name={name} value={selected || ""} ref={ref} onBlur={onBlur} readOnly />
 
       <button

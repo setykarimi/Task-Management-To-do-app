@@ -16,6 +16,7 @@ interface ITask {
   status: string;
   title: string;
   user_id: string;
+  group_name: string
 }
 
 export default function Dashboard() {
@@ -72,13 +73,13 @@ export default function Dashboard() {
         {inprogressTasks.length}
       </span>
      </div>
-<div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
+      <div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
         {inprogressTasks?.map((task: ITask) => (
           <div
             key={task.id}
             className="bg-[#E7F3FF] p-4 rounded-xl w-56 flex-shrink-0"
           >
-            <span className="text-[#6E6A7C] text-xs block">Office Project</span>
+            <span className="text-[#6E6A7C] text-xs block">{task.group_name}</span>
             <span className="block font-medium">{task.title}</span>
             <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white mt-2">
               <div className="h-full w-1/2 bg-[#0087FF] rounded-full"></div>
