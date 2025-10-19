@@ -14,4 +14,5 @@ export interface ITaskGroup {
   title: string;
   description: string;
   user_id: string;
+  task_count: number;
 }
