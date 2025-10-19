@@ -12,5 +12,5 @@ export const PROFILES_API = {
 
 export const TASKS_API = {
     TASKS: 'rest/v1/tasks',
-    TASK_GROUP: 'rest/v1/task-groups'
+    TASK_GROUP: 'rest/v1/task_groups'
 }
