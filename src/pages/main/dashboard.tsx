@@ -2,10 +2,11 @@ import type { ITaskGroup } from "@/components/types";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
-import { useMutation } from "@tanstack/react-query";
-import { Notification } from "iconsax-reactjs";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Add, AddCircle, AddSquare, Notification } from "iconsax-reactjs";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 interface ITask {
   created_at: string;
@@ -22,53 +23,37 @@ interface ITask {
 
 export default function Dashboard() {
   const { profile } = useAuth()
-  const { mutateAsync: fetchTasks, isPending, data: inprogressTasks } = useMutation({
-    mutationFn: async () => {
+  const navigate = useNavigate()
+
+  const { data: inprogressTasks, isPending } = useQuery({
+    queryKey: ["tasks", "inprogress"], 
+    queryFn: async () => {
       const res = await http.get(`${TASKS_API.TASKS}?status=eq.inprogress`);
       return res.data;
     },
-    onSuccess: (result) => {
-      return result;
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.error_code);
-    },
+    staleTime: 1000 * 60 * 5, 
   });
 
-  const { mutateAsync: fetchTodayTasks, isPending: isPendingTodayTasks, data: todayTasks } = useMutation({
-    mutationFn: async () => {
-      const today = new Date().toISOString().split('T')[0];
+  const { data: todayTasks, isPending: isPendingTodayTasks } = useQuery({
+    queryKey: ["tasks", "today"],
+    queryFn: async () => {
+      const today = new Date().toISOString().split("T")[0];
       const url = `${TASKS_API.TASKS}?start_date=lte.${today}&end_date=gte.${today}`;
-      
       const res = await http.get(url);
       return res.data;
     },
-    onSuccess: (result) => {
-      return result;
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.error_code || "خطا در دریافت تسک‌های امروز");
-    },
+    staleTime: 1000 * 60 * 5,
   });
 
-  const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
-    mutationFn: async () => {
+  const { data: taskGroups, isPending: peindingTaskGroup } = useQuery({
+    queryKey: ["taskGroups"],
+    queryFn: async () => {
       const res = await http.get(TASKS_API.TASK_GROUP);
       return res.data;
     },
-    onSuccess: (result) => {
-      return result;
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.error_code);
-    },
+    staleTime: 1000 * 60 * 5,
   });
 
-  useEffect(() => {
-    fetchTasks();
-    fetchTaskGroup();
-    fetchTodayTasks()
-  }, []);
 
   if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <div>loading</div>;
 
@@ -92,7 +77,7 @@ export default function Dashboard() {
               className="bg-[#5F33E1] p-5 rounded-xl w-full flex-shrink-0 text-white"
             >
               <span className="block font-medium text-lg">{task.title}</span>
-              <span className="font-light text-sm">{task.status == "inprogress" ? "Your Task is in Progress" : ""}</span>
+              <span className="font-light text-sm">{task.status == "inprogress" ? "Your task is in Progress" : task.status == 'todo' ? "Your task is almost done" : "Your task is not started yet:)"}</span>
             </div>
           ))}
         </div>
@@ -103,7 +88,7 @@ export default function Dashboard() {
         <div className="flex items-center mt-4"> 
           <h4 className="font-bold text-lg">In Progress</h4> 
           <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
-            {inprogressTasks.length}
+            {inprogressTasks?.length}
           </span>
         </div>
         <div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
@@ -123,12 +108,17 @@ export default function Dashboard() {
       </section>
 
       <section>
-        <div className="flex items-center my-4"> 
-          <h4 className="font-bold text-lg">Task Groups</h4> 
-          <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
-            {taskGroups.length}
-          </span>
-      </div> 
+        <div className="flex justify-between items-center">
+          <div className="flex items-center my-4"> 
+            <h4 className="font-bold text-lg">Task Groups</h4> 
+            <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
+              {taskGroups?.length}
+            </span>
+          </div> 
+          <button className="cursor-pointer" onClick={()=> navigate('/add-task-group')}>
+            <Add size="28" color="#5F33E1" />
+          </button>
+        </div>
       <div className="flex flex-col gap-4">
         {taskGroups?.map((task: ITaskGroup) => (
           <div className="bg-white p-4 rounded-xl shadow">
