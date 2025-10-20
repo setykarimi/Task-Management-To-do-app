@@ -35,6 +35,22 @@ export default function Dashboard() {
     },
   });
 
+  const { mutateAsync: fetchTodayTasks, isPending: isPendingTodayTasks, data: todayTasks } = useMutation({
+    mutationFn: async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const url = `${TASKS_API.TASKS}?start_date=lte.${today}&end_date=gte.${today}`;
+      
+      const res = await http.get(url);
+      return res.data;
+    },
+    onSuccess: (result) => {
+      return result;
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error_code || "خطا در دریافت تسک‌های امروز");
+    },
+  });
+
   const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
     mutationFn: async () => {
       const res = await http.get(TASKS_API.TASK_GROUP);
@@ -51,9 +67,10 @@ export default function Dashboard() {
   useEffect(() => {
     fetchTasks();
     fetchTaskGroup();
+    fetchTodayTasks()
   }, []);
 
-  if (isPending || peindingTaskGroup || !profile) return <div>loading</div>;
+  if (isPending || peindingTaskGroup || !profile || peindingTaskGroup) return <div>loading</div>;
 
   return (
     <div>
