@@ -14,7 +14,7 @@ type Inputs = {
 
 
 export const Profile = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit, formState: {errors} } = useForm<Inputs>();
   const { user, profile } = useAuth()
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -65,8 +65,8 @@ export const Profile = () => {
       <h1 className="text-center font-bold text-xl">My profile</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
-          <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" />
-          <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: true }} type="file" />
+          <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" errors={errors} />
+          <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: true }} type="file" errors={errors} />
           <button disabled={createProfilePendign || profileUpdatePending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
             <span className='block m-auto'>Submit</span> 
           </button>
