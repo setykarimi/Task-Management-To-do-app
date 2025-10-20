@@ -24,7 +24,7 @@ export default function Dashboard() {
   const { profile } = useAuth()
   const { mutateAsync: fetchTasks, isPending, data: inprogressTasks } = useMutation({
     mutationFn: async () => {
-      const res = await http.get(`${TASKS_API.TASKS}?status=eq.todo`);
+      const res = await http.get(`${TASKS_API.TASKS}?status=eq.inprogress`);
       return res.data;
     },
     onSuccess: (result) => {
@@ -70,7 +70,7 @@ export default function Dashboard() {
     fetchTodayTasks()
   }, []);
 
-  if (isPending || peindingTaskGroup || !profile || peindingTaskGroup) return <div>loading</div>;
+  if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <div>loading</div>;
 
   return (
     <div>
@@ -84,13 +84,28 @@ export default function Dashboard() {
           <Notification className="ml-auto" size="21" variant="Bold" />
         </div>
       </header>
+      {todayTasks && <section>
+        <div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
+          {todayTasks?.map((task: ITask) => (
+            <div
+              key={task.id}
+              className="bg-[#5F33E1] p-5 rounded-xl w-full flex-shrink-0 text-white"
+            >
+              <span className="block font-medium text-lg">{task.title}</span>
+              <span className="font-light text-sm">{task.status == "inprogress" ? "Your Task is in Progress" : ""}</span>
+            </div>
+          ))}
+        </div>
+      </section>}
+      
+
       <section>
-      <div className="flex items-center"> 
-        <h4 className="font-bold text-lg">In Progress</h4> 
-        <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
-          {inprogressTasks.length}
-        </span>
-      </div>
+        <div className="flex items-center mt-4"> 
+          <h4 className="font-bold text-lg">In Progress</h4> 
+          <span className="text-[#5F33E1] bg-[#EEE9FF] text-sm w-5 h-5 flex justify-center items-center rounded-full ml-2">
+            {inprogressTasks.length}
+          </span>
+        </div>
         <div className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
           {inprogressTasks?.map((task: ITask) => (
             <div
@@ -105,8 +120,8 @@ export default function Dashboard() {
             </div>
           ))}
         </div>
-
       </section>
+
       <section>
         <div className="flex items-center my-4"> 
           <h4 className="font-bold text-lg">Task Groups</h4> 
