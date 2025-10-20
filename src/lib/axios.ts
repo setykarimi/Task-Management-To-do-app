@@ -62,14 +62,13 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("error", error)
     const originalRequest = error.config;
 
-    // If no response or not 401, just propagate
     if (!error.response || error.response.status !== 401) {
       return Promise.reject(error);
     }
 
-    // Prevent retry loops
     if (originalRequest._retry) {
       return Promise.reject(error);
     }
@@ -82,10 +81,8 @@ http.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // If a refresh is already in progress, wait for it
     if (!refreshPromise) {
       refreshPromise = performRefresh(refreshToken);
-      // ensure we clear the reference after completion
       refreshPromise.finally(() => {
         refreshPromise = null;
       });
@@ -93,13 +90,11 @@ http.interceptors.response.use(
 
     const newAccessToken = await refreshPromise;
     if (newAccessToken) {
-      // set header and retry original request
       originalRequest.headers = originalRequest.headers ?? {};
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return http(originalRequest);
     }
 
-    // Refresh failed -> clear and redirect
     localStorage.clear();
     window.location.href = "/";
     return Promise.reject(error);

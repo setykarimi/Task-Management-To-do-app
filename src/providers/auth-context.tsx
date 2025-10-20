@@ -99,10 +99,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!token) {
       if (location.pathname.startsWith("/dashboard")) {
-        navigate("/login", { replace: true });
+        navigate("/", { replace: true });
       }
     } else {
-      if (location.pathname === "/login") {
+      if (location.pathname === "/") {
         navigate("/dashboard", { replace: true });
       }
     }

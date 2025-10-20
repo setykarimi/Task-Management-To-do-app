@@ -2,10 +2,8 @@ import type { ITaskGroup } from "@/components/types";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Add, AddCircle, AddSquare, Notification } from "iconsax-reactjs";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { Add, Notification } from "iconsax-reactjs";
 import { useNavigate } from "react-router";
 
 interface ITask {
