@@ -7,7 +7,7 @@ export default function Layout() {
     <AuthProvider>
       <div className={`bg-[url(/src/assets/img/background.png)] bg-no-repeat bg-cover`}>
         <Toaster />
-        <div className='p-4 min-h-[90vh]'>
+        <div className='p-4 min-h-[100vh] flex flex-col justify-between'>
           <Outlet />
         </div>
       </div>
