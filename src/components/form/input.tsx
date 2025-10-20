@@ -1,15 +1,14 @@
 import { Eye, EyeSlash } from "iconsax-reactjs"
 import { useState, type FC } from "react"
-import type { ITask } from "../types"
 import type { FieldErrors } from "react-hook-form"
 
 interface IProps{
     register: any, 
     label: string, 
-    name: keyof ITask, 
+    name: string, 
     type: string, 
     rules?: any
-    errors: FieldErrors<ITask>
+    errors: FieldErrors<any>
 }
 
 const Input:FC<IProps> = ({register, label, name, type, rules, errors})=> {
