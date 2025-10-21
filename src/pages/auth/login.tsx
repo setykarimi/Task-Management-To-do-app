@@ -1,4 +1,3 @@
-import person from '@/assets/img/person.svg';
 import Input from "@/components/form/input";
 import http from "@/lib/axios";
 import { AUTH_API } from "@/services/api";
