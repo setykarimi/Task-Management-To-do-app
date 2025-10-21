@@ -113,16 +113,16 @@ export default function Dashboard() {
               {taskGroups?.length}
             </span>
           </div> 
-          <button className="cursor-pointer" onClick={()=> navigate('/add-task-group')}>
+          <button className="cursor-pointer" onClick={()=> navigate('/task-group/add')}>
             <Add size="28" color="#5F33E1" />
           </button>
         </div>
       <div className="flex flex-col gap-4">
-        {taskGroups?.map((task: ITaskGroup) => (
-          <div className="bg-white p-4 rounded-xl shadow">
-            <span className="font-medium">{task.title}</span>
+        {taskGroups?.map((group: ITaskGroup) => (
+          <div className="bg-white p-4 rounded-xl shadow cursor-pointer" onClick={()=> navigate(`/task-group/edit/${group.id}`)}>
+            <span className="font-medium">{group.title}</span>
             <br></br>
-            <span className="text-[#6E6A7C] text-xs">{task.task_count} Tasks</span>
+            <span className="text-[#6E6A7C] text-xs">{group.task_count} Tasks</span>
           </div>
         ))}
       </div>
