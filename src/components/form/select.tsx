@@ -1,23 +1,29 @@
 import { useState, type FC, useRef, useEffect } from "react";
 import { ArrowDown2 } from "iconsax-reactjs";
-import type { FieldErrors } from "react-hook-form";
-import type { ITask, ITaskGroup } from "../types";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { ITask } from "../types";
 
 interface IProps {
-  register: any;
+  register: UseFormRegister<ITask>;
   label: string;
-  name: string;
+  name: keyof ITask;
   options: { id: string | number; title: string }[];
   rules?: any;
-  errors: FieldErrors<ITask>
+  errors: FieldErrors<ITask>;
+  defaultValue?: string | number; // 👈 اضافه کردیم
 }
 
-const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, errors }) => {
+const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, errors, defaultValue }) => {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string | number | undefined>();
+  const [selected, setSelected] = useState<string | number | undefined>(defaultValue);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { onChange, onBlur, ref } = register(name, rules);
+
+  useEffect(() => {
+    // برای زمانی که reset در فرم اتفاق میفته
+    setSelected(defaultValue);
+  }, [defaultValue]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -36,7 +42,12 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
   };
 
   return (
-    <div ref={dropdownRef} className={`relative bg-white p-3 rounded-xl flex flex-col shadow ${errors?.[name as keyof ITask] && "border border-red-200 shadow-red-100"}`}>
+    <div
+      ref={dropdownRef}
+      className={`relative bg-white p-3 rounded-xl flex flex-col shadow ${
+        errors?.[name] && "border border-red-200 shadow-red-100"
+      }`}
+    >
       <label className="text-[#6E6A7C] text-xs mb-1">{label}</label>
 
       <input type="hidden" name={name} value={selected || ""} ref={ref} onBlur={onBlur} readOnly />
