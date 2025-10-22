@@ -59,7 +59,7 @@ export default function Dashboard() {
     <div>
       <header>
         <div className="flex items-center mb-4">
-          { profile[0]?.avatar_url && <img src={profile[0]?.avatar_url} alt="avatar" className="w-10 h-10 rounded-full mr-2 shadow" /> }
+          {profile[0]?.avatar_url && <img src={profile[0]?.avatar_url} alt="avatar" className="w-10 h-10 rounded-full mr-2 shadow" />}
           <div>
             <span className="text-sm">Hello!</span>
             <h3 className="text-lg font-bold">{profile[0]?.name}</h3>

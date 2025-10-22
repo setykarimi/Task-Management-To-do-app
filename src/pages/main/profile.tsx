@@ -18,7 +18,7 @@ type Inputs = {
 export const Profile = () => {
   const { user, profile } = useAuth();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { mutateAsync: onProfileCreate } = useMutation({
     mutationFn: async (data: any) => {
@@ -39,15 +39,15 @@ export const Profile = () => {
   });
 
   const { mutateAsync: onAddAvatar } = useMutation({
-    mutationFn: async ({fileName,file}: {fileName:string, file: any}) => {
+    mutationFn: async ({ fileName, file }: { fileName: string; file: any }) => {
       const res = await http.put(`${PROFILES_API.AVATAR}/${fileName}`, file, {
         headers: {
-            "Content-Type": file.type
-        }
+          "Content-Type": file.type,
+        },
       });
       return res.data;
     },
-    onSuccess: () => toast.success("Profile updated successfully"),
+    onSuccess: () => {},
     onError: (error: any) => toast.error(error?.response?.data?.error_code),
   });
 
@@ -58,53 +58,65 @@ export const Profile = () => {
 
     const file = data.avatar_url?.[0];
 
-    // @@@______________ Update profile avatar ______________@@@
+    // ---------- Upload avatar (override) ----------
     if (file) {
       try {
-        
         const fileExt = file.name.split(".").pop();
-        const fileName = `${user.sub}_${Date.now()}.${fileExt}`;
-        onAddAvatar({fileName, file})
+        const fileName = `${user.sub}.${fileExt}`;
+        await onAddAvatar({ fileName, file });
         publicUrl = `${SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
-
       } catch (err: any) {
-
         console.error("Upload error:", err.response?.data || err.message);
         toast.error("Error while uploading avatar");
         return;
-
       }
     }
 
-    // @@@______________ Create or Update Profile ______________@@@
-    const postData = { id: user.sub, name: data.name, avatar_url: publicUrl };
+    // ---------- Create or Update profile ----------
+    const postData = { name: data.name, avatar_url: publicUrl };
 
     if (!profile?.length) {
-      await onProfileCreate(postData);
+      await onProfileCreate({ id: user.sub, ...postData });
     } else {
       await onProfileUpdate(postData);
     }
 
-    navigate('/dashboard')
+    navigate("/dashboard");
   };
 
-  useEffect(()=>{
-    if(profile) { reset({ name: profile[0].name })
-  }},[profile])
+  useEffect(() => {
+    if (profile) {
+      reset({ name: profile[0].name });
+    }
+  }, [profile]);
 
   return (
     <div>
       <h1 className="text-center font-bold text-xl">My profile</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
-          <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" errors={errors} />
-          <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: false }} type="file" errors={errors} />
+          <Input
+            label="Name"
+            name="name"
+            register={register}
+            rules={{ required: true }}
+            type="text"
+            errors={errors}
+          />
+          <Input
+            label="Profile picture"
+            name="avatar_url"
+            register={register}
+            rules={{ required: false }}
+            type="file"
+            errors={errors}
+          />
           <button
             disabled={false}
             type="submit"
             className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500"
           >
-            <span className='block m-auto'>Submit</span>
+            <span className="block m-auto">Submit</span>
           </button>
         </div>
       </form>
