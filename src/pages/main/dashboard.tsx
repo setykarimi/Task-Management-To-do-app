@@ -52,14 +52,14 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
-
   if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <div>loading</div>;
+
 
   return (
     <div>
       <header>
         <div className="flex items-center mb-4">
-          {/* <img src="" alt="avatar" /> */}
+          { profile[0]?.avatar_url && <img src={profile[0]?.avatar_url} alt="avatar" className="w-10 h-10 rounded-full mr-2 shadow" /> }
           <div>
             <span className="text-sm">Hello!</span>
             <h3 className="text-lg font-bold">{profile[0]?.name}</h3>
