@@ -95,22 +95,8 @@ export const Profile = () => {
       <h1 className="text-center font-bold text-xl">My profile</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
-          <Input
-            label="Name"
-            name="name"
-            register={register}
-            rules={{ required: true }}
-            type="text"
-            errors={errors}
-          />
-          <Input
-            label="Profile picture"
-            name="avatar_url"
-            register={register}
-            rules={{ required: false }}
-            type="file"
-            errors={errors}
-          />
+          <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" errors={errors} />
+          <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: false }} type="file" errors={errors} />
           <button
             disabled={false}
             type="submit"
