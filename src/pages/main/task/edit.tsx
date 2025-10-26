@@ -47,7 +47,7 @@ export const EditTask = () => {
         ));
     }
 
-    const { mutateAsync: onTaskUpdate, isPending } = useMutation({
+    const { mutateAsync: onTaskUpdate, isPending: onUpdatePending } = useMutation({
         mutationFn: async (data: ITaskT) => {
         const res = await http.patch(`${TASKS_API.TASKS}?id=eq.${id}`, data);
         return res.data;
@@ -75,7 +75,7 @@ export const EditTask = () => {
         },
     });
 
-    const { data: task } = useQuery({
+    const { data: task, isLoading } = useQuery({
         queryKey: ["tasks"],
         queryFn: async () => {
         const res = await http.get(`${TASKS_API.TASKS}?id=eq.${id}`);
@@ -97,7 +97,6 @@ export const EditTask = () => {
 
     useEffect(() => {
         if (id && task?.length && taskGroups) {
-            console.log("here")
             const startDate = task[0].start_date?.split("T")[0]; // فقط YYYY-MM-DD
             const endDate = task[0].end_date?.split("T")[0];
 
@@ -113,11 +112,13 @@ export const EditTask = () => {
     }, [id, task, reset, taskGroups]);
 
 
-    if(peindingTaskGroup)
+    if(peindingTaskGroup || isLoading)
         return <div>loading</div>
 
-    if(!isPending && !task?.length)
+    if(!isLoading && !task?.length)
         return <div>There is no task</div>
+
+
     return (
         <div>
             <div className="flex justify-center">
@@ -135,7 +136,7 @@ export const EditTask = () => {
                 <Input label="Start date" name="start_date" register={register} rules={{ required: true }} type="date" errors={errors} />
                 <Input label="End date" name="end_date" register={register} rules={{ required: true }} type="date" errors={errors} />
                 <Textarea label="Description" name="description" register={register} />
-                <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
+                <button disabled={isLoading} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
                     <span className='block m-auto'>Update Task</span> 
                 </button>
                 </div>
