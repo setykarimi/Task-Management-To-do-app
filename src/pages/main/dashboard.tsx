@@ -4,7 +4,7 @@ import { useAuth } from "@/providers";
 import { TASKS_API } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { Add, Notification } from "iconsax-reactjs";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 interface ITask {
   created_at: string;
@@ -76,6 +76,7 @@ export default function Dashboard() {
             >
               <span className="block font-medium text-lg">{task.title}</span>
               <span className="font-light text-sm">{task.status == "inprogress" ? "Your task is in Progress" : task.status == 'todo' ? "Your task is almost done" : "Your task is not started yet:)"}</span>
+              <Link to={`/task/edit/${task.id}`} className="block bg-[#EEE9FF] text-[#5F33E1] w-fit px-2 py-1.5 rounded-md mt-4 text-sm">View Task</Link>            
             </div>
           ))}
         </div>
