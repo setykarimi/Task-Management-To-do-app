@@ -1,3 +1,4 @@
+import { taskType } from "@/assets/statics";
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
@@ -77,7 +78,7 @@ export const AddTask = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors} />
-          <SelectBox label="Status" name="status" options={[{title: "Done", id: "done"}, { title: "To do", id: 'todo'}, {title: "In progress", id: "inprogress"}]} register={register} rules={{ required: true }} errors={errors}/>
+          <SelectBox label="Status" name="status" options={taskType} register={register} rules={{ required: true }} errors={errors}/>
           <SelectBox label="Group" name="group_id" options={taskGroups || []} register={register} rules={{ required: true }} errors={errors}/>
           <Input label="Start date" name="start_date" register={register} rules={{ required: true }} type="date" errors={errors} />
           <Input label="End date" name="end_date" register={register} rules={{ required: true }} type="date" errors={errors} />
