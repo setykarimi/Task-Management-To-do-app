@@ -2,6 +2,7 @@ import { taskType } from "@/assets/statics";
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
+import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
@@ -12,13 +13,15 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
+type ITaskT = Omit<ITask, "user_id" | "id" | "created_at" >
+
 
 export const AddTask = () => {
   const { register, handleSubmit, formState: {errors} } = useForm<ITask>();
   const { user } = useAuth()
   const navigate = useNavigate()
   
-  const onSubmit: SubmitHandler<ITask> = async (data) => {
+  const onSubmit: SubmitHandler<ITaskT> = async (data) => {
     if(!user) return 
 
     const postData = {
@@ -36,7 +39,7 @@ export const AddTask = () => {
   };
 
   const { mutateAsync: onTaskCreate, isPending } = useMutation({
-    mutationFn: async (data: ITask) => {
+    mutationFn: async (data: ITaskT) => {
       const res = await http.post(TASKS_API.TASKS, data);
       return res.data;
     },
@@ -74,7 +77,7 @@ export const AddTask = () => {
 
   return (
     <div>
-      <h1 className="text-center font-bold text-xl">Create Task</h1>
+      <PageTitle title="Create Task"/>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors} />

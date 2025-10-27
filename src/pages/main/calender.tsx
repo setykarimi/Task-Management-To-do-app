@@ -1,4 +1,5 @@
 import { taskType } from "@/assets/statics";
+import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
@@ -51,7 +52,7 @@ export const Calender = () => {
 
   return (
     <div>
-      <h1 className="text-center font-bold text-xl">Today’s Tasks</h1>
+      <PageTitle title="Today’s Tasks"/>
       <section className="flex pt-2 gap-4 flex-nowrap overflow-x-auto overflow-y-hidden mt-4 pb-2 scroll-hide touch-pan-x">
         {days.map((dayObj) => {
           const formatted = dayObj.label.split("/");

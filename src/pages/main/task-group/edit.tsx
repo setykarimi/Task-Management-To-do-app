@@ -1,4 +1,5 @@
 import Input from "@/components/form/input";
+import PageTitle from "@/components/title";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -84,12 +85,12 @@ export const EditTaskGroup = () => {
 
     return (
         <div>
-            <div className="flex justify-center">
-                <h1 className="font-bold text-xl">Update Project</h1>
-                <button className="ml-auto cursor-pointer" disabled={isPendingDelete} onClick={handleDelete}>
+           <PageTitle title="Update Project">
+                <button className="absolute right-0 cursor-pointer -mt-6" disabled={isPendingDelete} onClick={handleDelete}>
                     <MinusCirlce size="24" color="red" variant="Bulk" />
                 </button>
-            </div>
+            </PageTitle>
+           
             <>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col justify-center gap-6 mt-6">

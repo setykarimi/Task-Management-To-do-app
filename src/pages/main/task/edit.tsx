@@ -1,6 +1,7 @@
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
+import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
@@ -11,14 +12,14 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router";
 
-type ITaskT = Omit<ITask, "user_id">
+type ITaskT = Omit<ITask, "user_id" | "id" | "created_at" >
 
 export const EditTask = () => {
     const { register, handleSubmit, formState: {errors}, reset, control } = useForm<ITask>();
     const navigate = useNavigate()
     const {id} = useParams()
 
-    const onSubmit: SubmitHandler<ITask> = async (data) => {
+    const onSubmit: SubmitHandler<ITaskT> = async (data) => {
 
         const postData = {
             title: data.title,
@@ -121,12 +122,11 @@ export const EditTask = () => {
 
     return (
         <div>
-            <div className="flex justify-center">
-                <h1 className="font-bold text-xl">Update Task</h1>
-                <button className="ml-auto cursor-pointer" disabled={isPendingDelete} onClick={handleDelete}>
+            <PageTitle title="Update Task">
+                <button className="absolute right-0 cursor-pointer -mt-6" disabled={isPendingDelete} onClick={handleDelete}>
                     <MinusCirlce size="24" color="red" variant="Bulk" />
                 </button>
-            </div>
+            </PageTitle>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col justify-center gap-6 mt-6">

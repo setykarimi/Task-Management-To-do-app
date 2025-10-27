@@ -1,4 +1,5 @@
 import Input from "@/components/form/input";
+import PageTitle from "@/components/title";
 import http from "@/lib/axios";
 import { useAuth } from "@/providers";
 import { PROFILES_API } from "@/services/api";
@@ -92,7 +93,8 @@ export const Profile = () => {
 
   return (
     <div>
-      <h1 className="text-center font-bold text-xl">My profile</h1>
+      <PageTitle title="My profile"/>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" errors={errors} />
