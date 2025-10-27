@@ -94,7 +94,8 @@ export default function Dashboard() {
           {inprogressTasks?.map((task: ITask) => (
             <div
               key={task.id}
-              className="bg-[#E7F3FF] p-4 rounded-xl w-56 flex-shrink-0"
+              onClick={()=> navigate(`/task/edit/${task.id}`)}
+              className="bg-[#E7F3FF] p-4 rounded-xl w-56 flex-shrink-0 cursor-pointer"
             >
               <span className="text-[#6E6A7C] text-xs block">{task.group_name}</span>
               <span className="block font-medium">{task.title}</span>

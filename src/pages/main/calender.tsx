@@ -6,10 +6,12 @@ import { TASKS_API } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { Clock } from "iconsax-reactjs";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const Calender = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedType, setSelectedType] = useState("");
+  const navigate = useNavigate()
 
   const today = new Date();
   const start = new Date();
@@ -103,7 +105,7 @@ export const Calender = () => {
         {isPending ? (
           <p className="text-gray-500 text-sm text-center">Loading...</p>
         ) : tasks?.length ? (
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {tasks.map((task: ITask) => {
 
               const endDate = new Date(task.end_date);
@@ -113,7 +115,7 @@ export const Calender = () => {
 
 
               return (
-                <li key={task.id} className="bg-white shadow p-3 rounded-lg text-sm flex justify-between">
+                <li key={task.id} className="bg-white shadow p-3 rounded-lg text-sm flex justify-between cursor-pointer" onClick={()=>navigate(`/task/edit/${task.id}`)}>
                   <div>
                     <span className="block text-[#6E6A7C] text-xs"> {task.group_name} </span>
                     <span className="block mt-1 font-regular"> {task.title} </span>
