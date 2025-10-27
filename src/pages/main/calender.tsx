@@ -1,7 +1,9 @@
 import { taskType } from "@/assets/statics";
+import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
+import { Clock } from "iconsax-reactjs";
 import { useState } from "react";
 
 export const Calender = () => {
@@ -15,10 +17,7 @@ export const Calender = () => {
   const end = new Date();
   end.setDate(today.getDate() + 3);
 
-  const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ];
+  const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const taskTypes = [{ title: "All", id: "" }, ...taskType];
 
@@ -34,7 +33,6 @@ export const Calender = () => {
     days.push({ label: formatted, value, date: copy });
   }
 
-  // ✅ فچ تسک‌ها بر اساس تاریخ و نوع
   const { data: tasks, isPending } = useQuery({
     queryKey: ["tasks", selectedDate.toISOString().split("T")[0], selectedType],
     queryFn: async () => {
@@ -51,14 +49,14 @@ export const Calender = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-
   return (
     <div>
-      {/* 🔹 تاریخ‌ها */}
-      <section className="flex pt-2 gap-4 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
+      <h1 className="text-center font-bold text-xl">Today’s Tasks</h1>
+      <section className="flex pt-2 gap-4 flex-nowrap overflow-x-auto overflow-y-hidden mt-4 pb-2 scroll-hide touch-pan-x">
         {days.map((dayObj) => {
           const formatted = dayObj.label.split("/");
-          const isSelected = selectedDate.toDateString() === dayObj.date.toDateString();
+          const isSelected =
+            selectedDate.toDateString() === dayObj.date.toDateString();
 
           return (
             <div
@@ -78,8 +76,8 @@ export const Calender = () => {
         })}
       </section>
 
-      {/* 🔹 فیلتر استتوس */}
-      <section className="flex pt-2 gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-2 pb-2 scroll-hide touch-pan-x">
+      {/* @@@______________ Status Filter ______________@@@ */}
+      <section className="flex pt-2 gap-2 flex-nowrap overflow-x-auto overflow-y-hidden mt-4 pb-2 scroll-hide touch-pan-x">
         {taskTypes.map((type) => {
           const isSelected = selectedType === type.id;
 
@@ -87,7 +85,7 @@ export const Calender = () => {
             <button
               key={type.id}
               onClick={() => setSelectedType(type.id)}
-              className={`px-5 py-1 rounded-lg text-sm text-nowrap border transition-all cursor-pointer ${
+              className={`px-5 py-1 rounded-lg text-sm text-nowrap border transition-all cursor-pointer shadow ${
                 isSelected
                   ? "bg-[#5F33E1] text-white border-[#5F33E1]"
                   : "bg-[#EDE8FF] text-[#5F33E1] border-transparent"
@@ -99,21 +97,36 @@ export const Calender = () => {
         })}
       </section>
 
-      {/* 🔹 لیست تسک‌ها */}
+      {/* @@@______________ Tasks  ______________@@@ */}
       <div className="mt-4">
         {isPending ? (
           <p className="text-gray-500 text-sm text-center">Loading...</p>
         ) : tasks?.length ? (
           <ul className="space-y-2">
-            {tasks.map((task: any) => (
-              <li
-                key={task.id}
-                className="bg-white shadow p-3 rounded-lg text-sm flex justify-between"
-              >
-                <span>{task.title}</span>
-                <span className="text-gray-400">{task.status}</span>
-              </li>
-            ))}
+            {tasks.map((task: ITask) => {
+
+              const endDate = new Date(task.end_date);
+              const diff = endDate.getTime() - selectedDate.getTime(); // 👈 مقایسه با selectedDate
+              const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+              const type = taskType.find((t) => t.id === task.status);
+
+
+              return (
+                <li key={task.id} className="bg-white shadow p-3 rounded-lg text-sm flex justify-between">
+                  <div>
+                    <span className="block text-[#6E6A7C] text-xs"> {task.group_name} </span>
+                    <span className="block mt-1 font-regular"> {task.title} </span>
+                    <div className="flex gap-1 items-center mt-1">
+                      <Clock size={14} color="#AB94FF"/>
+                      <span className={`text-xs font-light ${ days > 0 ? "text-[#AB94FF]" : "text-red-500"}`}>
+                      {days > 0 ? `${days} days left` : days === 0 ? "Today" : "Expired"}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs h-fit px-2 py-.5 rounded-full" style={{color: type?.color , background: type?.bg}}>{type?.title}</span>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-gray-400 text-sm text-center">No tasks found</p>

@@ -3,10 +3,12 @@ export interface ITask {
   title: string;
   status: string;
   group_id: string;
-  
+  group_name: string;
   end_date: string;
   start_date: string;
   description: string;
+  created_at: Date | string;
+  id: number;
 }
 
 export interface ITaskGroup {
