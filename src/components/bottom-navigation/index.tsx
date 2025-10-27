@@ -50,7 +50,7 @@ export default function BottomNavigation() {
         const active = location.pathname == nav.link;
         return <Link to={nav.link}>{nav.icon(active)}</Link>;
       })}
-      <Link to={"/task/add"} className="bg-[#5F33E1] rounded-full w-12 h-12 flex justify-center items-center fixed mx-auto left-0 right-0 bottom-5 shadow-2xl">
+      <Link to={"/task/add"} title="Add Task" className="bg-[#5F33E1] rounded-full w-12 h-12 flex justify-center items-center fixed mx-auto left-0 right-0 bottom-5 shadow-2xl">
         <Add size="32" color="#FFF" />
       </Link>
     </div>
