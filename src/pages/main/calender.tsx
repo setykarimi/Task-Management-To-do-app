@@ -51,7 +51,6 @@ export const Calender = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  console.log("Tasks:", tasks);
 
   return (
     <div>
