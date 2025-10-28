@@ -1,4 +1,6 @@
+import { colors, icons } from "@/assets/statics";
 import Input from "@/components/form/input";
+import SelectBox from "@/components/form/select";
 import PageTitle from "@/components/title";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
@@ -37,6 +39,7 @@ export const EditTaskGroup = () => {
         ));
     }
 
+    {/* @@@______________ Edit task group ______________@@@ */}
     const { mutateAsync: onEditTaskGroup, isPending } = useMutation({
         mutationFn: async (data: Inputs) => {
         const res = await http.patch(`${TASKS_API.TASK_GROUP}?id=eq.${id}`, data);
@@ -51,6 +54,7 @@ export const EditTaskGroup = () => {
         },
     });
 
+    {/* @@@______________ Delete task group ______________@@@ */}
     const { mutateAsync: onDelete, isPending:isPendingDelete } = useMutation({
         mutationFn: async () => {
         const res = await http.delete(`${TASKS_API.TASK_GROUP}?id=eq.${id}`);
@@ -65,6 +69,7 @@ export const EditTaskGroup = () => {
         },
     });
 
+    {/* @@@______________ Task group ______________@@@ */}
     const { data: taskGroup } = useQuery({
         queryKey: ["taskGroup"],
         queryFn: async () => {
@@ -91,17 +96,18 @@ export const EditTaskGroup = () => {
                 </button>
             </PageTitle>
            
-            <>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex flex-col justify-center gap-6 mt-6">
-                        <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors}/>
-                        <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" errors={errors}/>
-                        <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
-                        <span className='block m-auto'>Update Project</span> 
-                        <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
-                        </button>
-                    </div>
-                </form>
-            </>
-        </div> )
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col justify-center gap-6 mt-6">
+                    <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors}/>
+                    <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" errors={errors}/>
+                    <SelectBox label="Color" name="color" options={colors} register={register} rules={{ required: true }} errors={errors}/>
+                    <SelectBox label="Icon" name="icon_name" options={icons} register={register} showIcon={true} rules={{ required: true }} errors={errors}/>
+                    <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
+                    <span className='block m-auto'>Update Project</span> 
+                    <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
+                    </button>
+                </div>
+            </form>
+        </div> 
+    )
 }
