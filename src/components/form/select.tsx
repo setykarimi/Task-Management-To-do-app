@@ -1,19 +1,29 @@
-import { useState, type FC, useRef, useEffect } from "react";
 import { ArrowDown2 } from "iconsax-reactjs";
+import { useEffect, useRef, useState, type FC } from "react";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import type { ITask } from "../types";
+import * as Iconsax from "iconsax-reactjs";
 
 interface IProps {
-  register: UseFormRegister<ITask>;
+  register: UseFormRegister<any>;
   label: string;
-  name: keyof ITask;
+  name: string;
   options: { id: string | number; title: string }[];
   rules?: any;
-  errors: FieldErrors<ITask>;
-  defaultValue?: string | number; // 👈 اضافه کردیم
+  errors: FieldErrors<any>;
+  defaultValue?: string | number;
+  showIcon?: boolean;
 }
 
-const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, errors, defaultValue }) => {
+const CustomSelect: FC<IProps> = ({
+  register,
+  label,
+  name,
+  options,
+  rules,
+  errors,
+  defaultValue,
+  showIcon,
+}) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | number | undefined>(defaultValue);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -21,7 +31,6 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
   const { onChange, onBlur, ref } = register(name, rules);
 
   useEffect(() => {
-    // برای زمانی که reset در فرم اتفاق میفته
     setSelected(defaultValue);
   }, [defaultValue]);
 
@@ -58,9 +67,7 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
         className="flex items-center justify-between w-full text-xs bg-transparent outline-0 border-none cursor-pointer"
       >
         <span className={selected ? "text-gray-800" : "text-gray-400"}>
-          {selected
-            ? options.find((o) => o.id === selected)?.title
-            : `Select ${label}`}
+          {selected ? options.find((o) => o.id === selected)?.title : `Select ${label}`}
         </span>
         <ArrowDown2
           size="16"
@@ -70,17 +77,25 @@ const CustomSelect: FC<IProps> = ({ register, label, name, options, rules, error
 
       {open && (
         <ul className="absolute z-20 left-0 right-0 mt-10 bg-white shadow-lg rounded-lg border border-gray-100 max-h-40 overflow-y-auto">
-          {options.map((opt) => (
-            <li
-              key={opt.id}
-              onClick={() => handleSelect(opt.id)}
-              className={`px-3 py-2 text-xs cursor-pointer hover:bg-indigo-50 hover:text-indigo-600 transition ${
-                selected === opt.id ? "bg-indigo-100 text-indigo-600" : ""
-              }`}
-            >
-              {opt.title}
-            </li>
-          ))}
+          {options.map((opt) => {
+            const IconComponent =
+              showIcon && Iconsax[opt.title as keyof typeof Iconsax]
+                ? (Iconsax[opt.title as keyof typeof Iconsax] as FC<{ size?: string | number }>)
+                : null;
+
+            return (
+              <li
+                key={opt.id}
+                onClick={() => handleSelect(opt.id)}
+                className={`px-3 py-2 text-xs cursor-pointer hover:bg-indigo-50 hover:text-indigo-600 transition flex gap-2 items-center ${
+                  selected === opt.id ? "bg-indigo-100 text-indigo-600" : ""
+                }`}
+              >
+                {IconComponent && <IconComponent size="14" />}
+                {opt.title}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
