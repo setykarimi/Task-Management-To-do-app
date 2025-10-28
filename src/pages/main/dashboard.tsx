@@ -7,6 +7,7 @@ import { Add, Notification, Logout } from "iconsax-reactjs";
 import { Link, useNavigate } from "react-router";
 import * as Iconsax from "iconsax-reactjs";
 import { useState, type FC } from "react";
+import Loading from "@/components/loading";
 
 export default function Dashboard() {
   const { profile, logout } = useAuth();
@@ -45,7 +46,7 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <div>loading</div>;
+  if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <Loading />;
 
   const toggleDropdown = () => setShowProfileDropdown(prev => !prev);
   const handleLogout = () => {

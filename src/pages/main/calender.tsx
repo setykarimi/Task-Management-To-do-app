@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import * as Iconsax from "iconsax-reactjs";
 import type { FC } from "react";
+import Loading from "@/components/loading";
 
 export const Calender = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -53,6 +54,10 @@ export const Calender = () => {
     },
     staleTime: 1000 * 60 * 5,
   });
+
+  if(isPending){
+    return <Loading />
+  }
 
   return (
     <div>

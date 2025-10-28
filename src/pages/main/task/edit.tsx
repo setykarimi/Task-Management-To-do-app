@@ -1,12 +1,13 @@
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
+import Loading from "@/components/loading";
 import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { MinusCirlce } from "iconsax-reactjs";
+import { ChartCircle, MinusCirlce } from "iconsax-reactjs";
 import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -114,7 +115,7 @@ export const EditTask = () => {
 
 
     if(peindingTaskGroup || isLoading)
-        return <div>loading</div>
+        return <Loading />
 
     if(!isLoading && !task?.length)
         return <div>There is no task</div>
