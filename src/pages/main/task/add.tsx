@@ -29,8 +29,7 @@ export const AddTask = () => {
       title: data.title,
       description: data.description,
       status: data.status,
-      group_id: data.group_id.split("-")[0],
-      group_name: data.group_id.split("-")[1],
+      group_id: data.group_id,
       end_date: data.end_date,
       start_date: data.start_date,
     }
@@ -38,6 +37,7 @@ export const AddTask = () => {
     onTaskCreate(postData);
   };
 
+  {/* @@@______________ Task create ______________@@@ */}
   const { mutateAsync: onTaskCreate, isPending } = useMutation({
     mutationFn: async (data: ITaskT) => {
       const res = await http.post(TASKS_API.TASKS, data);
@@ -52,13 +52,11 @@ export const AddTask = () => {
     },
   });
 
+  {/* @@@______________ Fetch ask group ______________@@@ */}
   const { mutateAsync: fetchTaskGroup, isPending: peindingTaskGroup, data: taskGroups } = useMutation({
     mutationFn: async () => {
       const res = await http.get(TASKS_API.TASK_GROUP);
-      return res.data.map((group: any) => ({
-        id: `${group.id}-${group.title}`,
-        title: group.title,
-      }));
+      return res.data
     },
     onSuccess: (result) => {
       return result;

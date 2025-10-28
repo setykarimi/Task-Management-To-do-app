@@ -25,8 +25,7 @@ export const EditTask = () => {
             title: data.title,
             description: data.description,
             status: data.status,
-            group_id: data.group_id.split("-")[0],
-            group_name: data.group_id.split("-")[1],
+            group_id: data.group_id,
             end_date: data.end_date,
             start_date: data.start_date,
         }
@@ -48,7 +47,8 @@ export const EditTask = () => {
         ));
     }
 
-    const { mutateAsync: onTaskUpdate, isPending: onUpdatePending } = useMutation({
+    {/* @@@______________ Task update ______________@@@ */}
+    const { mutateAsync: onTaskUpdate } = useMutation({
         mutationFn: async (data: ITaskT) => {
         const res = await http.patch(`${TASKS_API.TASKS}?id=eq.${id}`, data);
         return res.data;
@@ -62,6 +62,7 @@ export const EditTask = () => {
         },
     });
 
+    {/* @@@______________ Delete Task ______________@@@ */}
     const { mutateAsync: onDelete, isPending: isPendingDelete } = useMutation({
         mutationFn: async () => {
         const res = await http.delete(`${TASKS_API.TASKS}?id=eq.${id}`);
@@ -76,6 +77,7 @@ export const EditTask = () => {
         },
     });
 
+    {/* @@@______________ Get Task ______________@@@ */}
     const { data: task, isLoading } = useQuery({
         queryKey: ["tasks"],
         queryFn: async () => {
@@ -84,14 +86,12 @@ export const EditTask = () => {
         },
     });
 
+    {/* @@@______________ Get task group ______________@@@ */}
     const { data: taskGroups, isPending: peindingTaskGroup } = useQuery({
         queryKey: ["taskGroups"],
         queryFn: async () => {
         const res = await http.get(TASKS_API.TASK_GROUP);
-        return res.data.map((group: any) => ({
-                    id: `${group.id}-${group.title}`,
-                    title: group.title,
-                }));
+        return res.data
         },
         staleTime: 1000 * 60 * 5,
     });
@@ -105,7 +105,7 @@ export const EditTask = () => {
                 title: task[0].title,
                 description: task[0].description,
                 status: task[0].status,
-                group_id: `${task[0].group_id}-${task[0].group_name}`,
+                group_id: task[0].group_id,
                 start_date: startDate,
                 end_date: endDate,
             });
