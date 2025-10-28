@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Clock } from "iconsax-reactjs";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import * as Iconsax from "iconsax-reactjs";
+import type { FC } from "react";
 
 export const Calender = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -46,7 +48,7 @@ export const Calender = () => {
         url += `&status=eq.${selectedType}`; // اضافه کردن فیلتر استتوس
       }
 
-      const res = await http.get(url);
+      const res = await http.get(`${url}&select=*,task_groups(title,color,icon_name)`);
       return res.data;
     },
     staleTime: 1000 * 60 * 5,
@@ -55,6 +57,8 @@ export const Calender = () => {
   return (
     <div>
       <PageTitle title="Today’s Tasks"/>
+
+      {/* @@@______________ Date Filter ______________@@@ */}
       <section className="flex pt-2 gap-4 flex-nowrap overflow-x-auto overflow-y-hidden mt-4 pb-2 scroll-hide touch-pan-x">
         {days.map((dayObj) => {
           const formatted = dayObj.label.split("/");
@@ -113,11 +117,13 @@ export const Calender = () => {
               const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
               const type = taskType.find((t) => t.id === task.status);
 
+              const IconComponent = Iconsax[task.task_groups?.icon_name as keyof typeof Iconsax] as FC<{ size?: string | number, color:string, variant: string }>
+              const color = task.task_groups?.color.split("|")  
 
               return (
                 <li key={task.id} className="bg-white shadow p-3 rounded-lg text-sm flex justify-between cursor-pointer" onClick={()=>navigate(`/task/edit/${task.id}`)}>
                   <div>
-                    <span className="block text-[#6E6A7C] text-xs"> {task.group_name} </span>
+                    <span className="block text-[#6E6A7C] text-xs"> {task.task_groups?.title} </span>
                     <span className="block mt-1 font-regular"> {task.title} </span>
                     <div className="flex gap-1 items-center mt-1">
                       <Clock size={14} color="#AB94FF"/>
@@ -126,7 +132,10 @@ export const Calender = () => {
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs h-fit px-2 py-.5 rounded-full" style={{color: type?.color , background: type?.bg}}>{type?.title}</span>
+                  <div className="flex flex-col justify-between items-end">
+                    <span className="w-6 h-6 rounded-full flex justify-center items-center" style={{background: color ? color[1] : "#FFF"}}><IconComponent variant="Bold" size={16} color={color ? color[0] : ""} /></span>
+                    <span className="block text-xs h-fit px-2 py-.5 rounded-full" style={{color: type?.color , background: type?.bg}}>{type?.title}</span>
+                  </div>
                 </li>
               );
             })}
@@ -135,6 +144,7 @@ export const Calender = () => {
           <p className="text-gray-400 text-sm text-center">No tasks found</p>
         )}
       </div>
+      
     </div>
   );
 };

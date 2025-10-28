@@ -3,12 +3,12 @@ export interface ITask {
   title: string;
   status: string;
   group_id: string;
-  group_name: string;
   end_date: string;
   start_date: string;
   description: string;
   created_at: Date | string;
   id: number;
+  task_groups?: ITaskGroup
 }
 
 export interface ITaskGroup {
@@ -18,4 +18,6 @@ export interface ITaskGroup {
   description: string;
   user_id: string;
   task_count: number;
+  color:string;
+  icon_name:string
 }
