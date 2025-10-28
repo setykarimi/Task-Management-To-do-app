@@ -7,7 +7,7 @@ import type { ITask } from "@/components/types";
 import http from "@/lib/axios";
 import { TASKS_API } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { ChartCircle, MinusCirlce } from "iconsax-reactjs";
+import { MinusCirlce } from "iconsax-reactjs";
 import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
