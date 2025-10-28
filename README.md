@@ -32,7 +32,7 @@ This project demonstrates full frontend–backend integration with secure polici
 ### 🗂 Task Groups
 - `task_groups` table stores groups of tasks  
 - Relationship: `tasks.group_id` → `task_groups.id`  
-- Each group includes `title`, `description`, `user_id`, `icon`  
+- Each group includes `title`, `description`, `user_id`, `icon` , `color` 
 - Displayed dynamically with **Iconsax**  
 
 ### 💾 Supabase Policies

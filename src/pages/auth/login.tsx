@@ -13,7 +13,7 @@ type Inputs = {
 };
 
 export default function Login() {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit, formState: {errors} } = useForm<Inputs>();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -43,11 +43,11 @@ export default function Login() {
 
 
   return (
-    <>
+    <div className="pb-20">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
-          <Input label="Email" name="email" register={register} rules={{ required: true }} type="email" />
-          <Input label="Password" name="password" register={register} rules={{ required: true }} type="password" />
+          <Input errors={errors} label="Email" name="email" register={register} rules={{ required: true }} type="email" />
+          <Input errors={errors} label="Password" name="password" register={register} rules={{ required: true }} type="password" />
           <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
             <span className='block m-auto'>Login</span> 
             <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
@@ -57,6 +57,6 @@ export default function Login() {
       <Link to='/signup'>
           <span className='text-center block text-xs mt-2 text-[#5F33E1]'>Don't have an account?</span>
       </Link>
-    </>
+    </div>
   );
 }
