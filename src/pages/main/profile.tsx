@@ -21,6 +21,7 @@ export const Profile = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>();
   const navigate = useNavigate();
 
+  {/* @@@______________ Profile Create ______________@@@ */}
   const { mutateAsync: onProfileCreate } = useMutation({
     mutationFn: async (data: any) => {
       const res = await http.post(PROFILES_API.PROFILE, data);
@@ -30,6 +31,7 @@ export const Profile = () => {
     onError: (error: any) => toast.error(error?.response?.data?.error_code),
   });
 
+  {/* @@@______________ Profile Update ______________@@@ */}
   const { mutateAsync: onProfileUpdate } = useMutation({
     mutationFn: async (data: any) => {
       const res = await http.patch(`${PROFILES_API.PROFILE}?id=eq.${user?.sub}`, data);
@@ -39,6 +41,7 @@ export const Profile = () => {
     onError: (error: any) => toast.error(error?.response?.data?.error_code),
   });
 
+  {/* @@@______________ Avatar Create ______________@@@ */}
   const { mutateAsync: onAddAvatar } = useMutation({
     mutationFn: async ({ fileName, file }: { fileName: string; file: any }) => {
       const res = await http.put(`${PROFILES_API.AVATAR}/${fileName}`, file, {
@@ -59,7 +62,7 @@ export const Profile = () => {
 
     const file = data.avatar_url?.[0];
 
-    // ---------- Upload avatar (override) ----------
+    {/* @@@______________ Upload Avatar (override) ______________@@@ */}
     if (file) {
       try {
         const fileExt = file.name.split(".").pop();
