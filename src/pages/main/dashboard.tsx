@@ -48,11 +48,13 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
+  if(!profile) navigate("/profile")
+
   if (isLoading || pendingTaskGroup || isPendingTodayTasks) return <Loading />;
 
   if (isErrorInprogress || isErrorTaskGroup || isErrorTodayTasks) return <ErrorStatus error="Error while geting data"/>
 
-  if(!profile || !taskGroups.length || !todayTasks.length || !inprogressTasks.length) return <EmptyState status="Add your first task"/> 
+  if(!taskGroups.length || !todayTasks.length || !inprogressTasks.length) return <EmptyState status="Add your first task"/> 
 
   const toggleDropdown = () => setShowProfileDropdown(prev => !prev);
   const handleLogout = () => {
