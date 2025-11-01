@@ -1,7 +1,7 @@
 import { BoxSearch } from "iconsax-reactjs";
 import type { FC } from "react";
 
-const EmptyState :FC<{status: string}> = ({status}) => {
+const EmptyState :FC<{status?: string}> = ({status}) => {
   return (
     <div className="flex flex-col items-center justify-center mt-100">
         <BoxSearch size="40" color="#5F33E1"/>
