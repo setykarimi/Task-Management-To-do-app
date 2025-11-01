@@ -1,7 +1,4 @@
-import http from "@/lib/axios";
-import { PROFILES_API } from "@/services/api";
 import { decodeToken, getTokensFromUrl } from "@/utils";
-import { useMutation } from "@tanstack/react-query";
 import {
   createContext,
   useContext,
@@ -9,7 +6,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router";
 
 export interface SupabaseUser {
@@ -50,7 +46,7 @@ interface AuthContextType {
   user: SupabaseUser | null;
   token: string | null;
   logout: () => void;
-  profile: any;
+  updateUser: (user:SupabaseUser) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -60,22 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [token, setToken] = useState<string | null>(access_token);
+  const [user, setUser] = useState<SupabaseUser | null>(null)
 
-  const { mutateAsync: fetchProfile, data: profile } = useMutation({
-    mutationFn: async (user_id: string) => {
-      const res = await http.get(`${PROFILES_API.PROFILE}?id=eq.${user_id}`);
-      return res.data;
-    },
-    onSuccess: (result) => {
-      return result;
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.error_code);
-    },
-  });
-
+  
   // @@@______________ Save token from url (when user signup) ______________@@@
   useEffect(() => {
     const { access_token: signup_token, refresh_token } =
@@ -91,7 +75,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (access_token) {
       setToken(access_token);
-      setUser(decodeToken(access_token));
+      setUser(decodeToken(access_token))
+
     }
   }, [access_token]);
 
@@ -108,21 +93,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token, location.pathname, navigate]);
 
-  // @@@______________ Fetch user Profile ______________@@@
-  useEffect(() => {
-    if (user?.sub) fetchProfile(user?.sub);
-  }, [user]);
 
   // @@@______________ Logout ______________@@@
   const logout = () => {
     setToken(null);
-    setUser(null);
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
   };
 
+  const updateUser = (newUser: SupabaseUser) =>{
+    setUser(newUser)
+  }
+
+
   return (
-    <AuthContext.Provider value={{ user, token, logout, profile }}>
+    <AuthContext.Provider value={{ user, token, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
