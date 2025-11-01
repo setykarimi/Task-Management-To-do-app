@@ -6,8 +6,8 @@ export const AUTH_API = {
 }
 
 export const PROFILES_API = {
-    PROFILE: 'rest/v1/profiles',
-    AVATAR: 'storage/v1/object/avatars'
+    AVATAR: 'storage/v1/object/avatars',
+    PROFILE: 'auth/v1/user'
 }
 
 export const TASKS_API = {
