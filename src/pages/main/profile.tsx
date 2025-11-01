@@ -22,7 +22,7 @@ export const Profile = () => {
   const navigate = useNavigate();
 
   {/* @@@______________ Profile Create ______________@@@ */}
-  const { mutateAsync: onProfileCreate } = useMutation({
+  const { mutateAsync: onProfileCreate, isPending: isPendingProfileCreate } = useMutation({
     mutationFn: async (data: any) => {
       const res = await http.post(PROFILES_API.PROFILE, data);
       return res.data;
@@ -32,7 +32,7 @@ export const Profile = () => {
   });
 
   {/* @@@______________ Profile Update ______________@@@ */}
-  const { mutateAsync: onProfileUpdate } = useMutation({
+  const { mutateAsync: onProfileUpdate, isPending: isPendingProfileUpdate } = useMutation({
     mutationFn: async (data: any) => {
       const res = await http.patch(`${PROFILES_API.PROFILE}?id=eq.${user?.sub}`, data);
       return res.data;
@@ -42,7 +42,7 @@ export const Profile = () => {
   });
 
   {/* @@@______________ Avatar Create ______________@@@ */}
-  const { mutateAsync: onAddAvatar } = useMutation({
+  const { mutateAsync: onAddAvatar, } = useMutation({
     mutationFn: async ({ fileName, file }: { fileName: string; file: any }) => {
       const res = await http.put(`${PROFILES_API.AVATAR}/${fileName}`, file, {
         headers: {
@@ -103,9 +103,9 @@ export const Profile = () => {
           <Input label="Name" name="name" register={register} rules={{ required: true }} type="text" errors={errors} />
           <Input label="Profile picture" name="avatar_url" register={register} rules={{ required: false }} type="file" errors={errors} />
           <button
-            disabled={false}
+            disabled={isPendingProfileUpdate || isPendingProfileCreate}
             type="submit"
-            className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500"
+            className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow"
           >
             <span className="block m-auto">Submit</span>
           </button>

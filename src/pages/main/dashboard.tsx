@@ -7,7 +7,9 @@ import { Add, Notification, Logout } from "iconsax-reactjs";
 import { Link, useNavigate } from "react-router";
 import * as Iconsax from "iconsax-reactjs";
 import { useState, type FC } from "react";
-import Loading from "@/components/loading";
+import Loading from "@/components/status/loading";
+import ErrorStatus from "@/components/status/error";
+import EmptyState from "@/components/status/empty-state";
 
 export default function Dashboard() {
   const { profile, logout } = useAuth();
@@ -15,7 +17,7 @@ export default function Dashboard() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   {/* @@@______________ In progress tasks ______________@@@ */}
-  const { data: inprogressTasks, isPending } = useQuery({
+  const { data: inprogressTasks, isLoading, isError: isErrorInprogress } = useQuery({
     queryKey: ["tasks", "inprogress"], 
     queryFn: async () => {
       const res = await http.get(`${TASKS_API.TASKS}?status=eq.inprogress&select=*,task_groups(title,color,icon_name)`);
@@ -25,7 +27,7 @@ export default function Dashboard() {
   });
 
   {/* @@@______________ Today tasks ______________@@@ */}
-  const { data: todayTasks, isPending: isPendingTodayTasks } = useQuery({
+  const { data: todayTasks, isLoading: isPendingTodayTasks, isError: isErrorTodayTasks } = useQuery({
     queryKey: ["tasks", "today"],
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
@@ -37,7 +39,7 @@ export default function Dashboard() {
   });
 
   {/* @@@______________ Task groups ______________@@@ */}
-  const { data: taskGroups, isPending: peindingTaskGroup } = useQuery({
+  const { data: taskGroups, isLoading: pendingTaskGroup, isError: isErrorTaskGroup } = useQuery({
     queryKey: ["taskGroups"],
     queryFn: async () => {
       const res = await http.get(TASKS_API.TASK_GROUP);
@@ -46,7 +48,11 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isPending || peindingTaskGroup || !profile || isPendingTodayTasks) return <Loading />;
+  if (isLoading || pendingTaskGroup || isPendingTodayTasks) return <Loading />;
+
+  if (isErrorInprogress || isErrorTaskGroup || isErrorTodayTasks) return <ErrorStatus error="Error while geting data"/>
+
+  if(!profile || !taskGroups.length || !todayTasks.length || !inprogressTasks.length) return <EmptyState /> 
 
   const toggleDropdown = () => setShowProfileDropdown(prev => !prev);
   const handleLogout = () => {

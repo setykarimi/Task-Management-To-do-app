@@ -16,16 +16,17 @@ export default function Signup() {
   const { register, handleSubmit, formState: {errors} } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    onLogin(data);
+    onSignup(data);
   };
 
-  const { mutateAsync: onLogin, isPending } = useMutation({
+  const { mutateAsync: onSignup, isPending } = useMutation({
     mutationFn: async (data: Inputs) => {
       const res = await http.post(AUTH_API.SIGNUP, data);
       return res.data;
     },
     onSuccess: () => {
       toast.success("Confirmation Send Check your email please");
+      window.location.href = "https://to-do-app-gamma-sepia-49.vercel.app/dashboard";
 
     },
     onError: (error: any) => {

@@ -1,7 +1,7 @@
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
-import Loading from "@/components/loading";
+import Loading from "@/components/status/loading";
 import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
 import http from "@/lib/axios";

@@ -9,7 +9,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import * as Iconsax from "iconsax-reactjs";
 import type { FC } from "react";
-import Loading from "@/components/loading";
+import Loading from "@/components/status/loading";
+import ErrorStatus from "@/components/status/error";
 
 export const Calender = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -39,7 +40,7 @@ export const Calender = () => {
     days.push({ label: formatted, value, date: copy });
   }
 
-  const { data: tasks, isPending } = useQuery({
+  const { data: tasks, isLoading, isError, error } = useQuery({
     queryKey: ["tasks", selectedDate.toISOString().split("T")[0], selectedType],
     queryFn: async () => {
       const date = selectedDate.toISOString().split("T")[0];
@@ -55,8 +56,12 @@ export const Calender = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  if(isPending){
+  if(isLoading){
     return <Loading />
+  }
+
+  if(isError){
+    return <ErrorStatus error={error?.message}/>
   }
 
   return (
@@ -111,7 +116,7 @@ export const Calender = () => {
 
       {/* @@@______________ Tasks  ______________@@@ */}
       <div className="mt-4">
-        {isPending ? (
+        {isLoading ? (
           <p className="text-gray-500 text-sm text-center">Loading...</p>
         ) : tasks?.length ? (
           <ul className="space-y-4">
