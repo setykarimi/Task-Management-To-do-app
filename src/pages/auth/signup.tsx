@@ -20,19 +20,23 @@ export default function Signup() {
   };
 
   const { mutateAsync: onSignup, isPending } = useMutation({
-    mutationFn: async (data: Inputs) => {
-      const res = await http.post(AUTH_API.SIGNUP, data);
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Confirmation Send Check your email please");
-      window.location.href = "https://to-do-app-gamma-sepia-49.vercel.app/dashboard";
-
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.error_code);
-    },
-  });
+  mutationFn: async (data: Inputs) => {
+    const res = await http.post(AUTH_API.SIGNUP, {
+      email: data.email,
+      password: data.password,
+      options: {
+        redirectTo: "https://to-do-app-gamma-sepia-49.vercel.app/dashboard"
+      }
+    });
+    return res.data;
+  },
+  onSuccess: () => {
+    toast.success("Confirmation sent! Check your email.");
+  },
+  onError: (error: any) => {
+    toast.error(error?.response?.data?.error_code);
+  },
+});
 
 
   return (
