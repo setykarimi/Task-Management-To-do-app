@@ -14,10 +14,12 @@ import { useNavigate, useParams } from "react-router";
 type Inputs = {
   title: string;
   description: string;
+  color: string 
+  icon_name: string
 };
 
 export const EditTaskGroup = () => {
-    const { register, handleSubmit, formState: {errors}, reset } = useForm<Inputs>();
+    const { register, handleSubmit, formState: {errors}, reset, control } = useForm<Inputs>();
     const navigate = useNavigate();
     const {id} = useParams()
 
@@ -81,8 +83,10 @@ export const EditTaskGroup = () => {
     useEffect(() => {
     if (id && taskGroup && taskGroup.length > 0) {
         reset({
-        title: taskGroup[0].title,
-        description: taskGroup[0].description,
+            title: taskGroup[0].title,
+            description: taskGroup[0].description,
+            icon_name: taskGroup[0]?.icon_name,
+            color: taskGroup[0]?.color
         });
     }
     }, [id, taskGroup, reset]);
@@ -100,8 +104,8 @@ export const EditTaskGroup = () => {
                 <div className="flex flex-col justify-center gap-6 mt-6">
                     <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors}/>
                     <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" errors={errors}/>
-                    <SelectBox label="Color" name="color" options={colors} register={register} rules={{ required: true }} errors={errors}/>
-                    <SelectBox label="Icon" name="icon_name" options={icons} register={register} showIcon={true} rules={{ required: true }} errors={errors}/>
+                    <SelectBox defaultValue={control._formValues["color"]} label="Color" name="color" options={colors} register={register} rules={{ required: true }} errors={errors}/>
+                    <SelectBox defaultValue={control._formValues["icon_name"]} label="Icon" name="icon_name" options={icons} register={register} showIcon={true} rules={{ required: true }} errors={errors}/>
                     <button disabled={isPending} type="submit" className="bg-[#5F33E1] shadow-lg shadow-[#5f33e188] text-white py-3 rounded-2xl font-bold cursor-pointer flex justify-center items-center gap-1 px-2 disabled:bg-gray-500 disabled:shadow disabled:cursor-not-allowed">
                     <span className='block m-auto'>Update Project</span> 
                     <ArrowRight3 size="20" color="#FFF" variant="Bold"/> 
