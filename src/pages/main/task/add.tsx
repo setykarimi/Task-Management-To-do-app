@@ -2,6 +2,7 @@ import { taskType } from "@/assets/statics";
 import Input from "@/components/form/input";
 import SelectBox from "@/components/form/select";
 import Textarea from "@/components/form/text-area";
+import EmptyState from "@/components/status/empty-state";
 import Loading from "@/components/status/loading";
 import PageTitle from "@/components/title";
 import type { ITask } from "@/components/types";
@@ -73,6 +74,10 @@ export const AddTask = () => {
 
   if(peindingTaskGroup)
     return <Loading />
+
+
+  if(!peindingTaskGroup && !taskGroups?.length)
+    return <EmptyState status="Please add your project first"/>
 
   return (
     <div>
