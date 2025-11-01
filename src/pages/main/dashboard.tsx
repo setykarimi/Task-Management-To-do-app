@@ -52,7 +52,7 @@ export default function Dashboard() {
 
   if (isErrorInprogress || isErrorTaskGroup || isErrorTodayTasks) return <ErrorStatus error="Error while geting data"/>
 
-  if(!profile || !taskGroups.length || !todayTasks.length || !inprogressTasks.length) return <EmptyState /> 
+  if(!profile || !taskGroups.length || !todayTasks.length || !inprogressTasks.length) return <EmptyState status="Add your first task"/> 
 
   const toggleDropdown = () => setShowProfileDropdown(prev => !prev);
   const handleLogout = () => {
