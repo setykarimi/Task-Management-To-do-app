@@ -94,7 +94,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {(!taskGroups.length || !todayTasks.length || !inprogressTasks.length) ? <EmptyState status="Add your first task"/>
+      {(!taskGroups.length || !todayTasks.length || !inprogressTasks.length) ? <EmptyState status="There is no task for today"/>
       :  
       <>
         {/* @@@______________ Today tasks ______________@@@ */}
