@@ -50,7 +50,7 @@ export const AddTaskGroup = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col justify-center gap-6 mt-6">
               <Input label="Title" name="title" register={register} rules={{ required: true }} type="text" errors={errors}/>
-              <Input label="Description" name="description" register={register} rules={{ required: true }} type="text" errors={errors}/>
+              <Input label="Description" name="description" register={register} type="text" errors={errors}/>
               <SelectBox label="Color" name="color" options={colors} register={register} rules={{ required: true }} errors={errors}/>
               <SelectBox label="Icon" name="icon_name" options={icons} register={register} showIcon={true} rules={{ required: true }} errors={errors}/>
 
