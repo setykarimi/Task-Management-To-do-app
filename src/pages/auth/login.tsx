@@ -43,7 +43,7 @@ export default function Login() {
 
 
   return (
-    <div className="pb-20">
+    <div className="pb-8">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center gap-6 mt-6">
           <Input errors={errors} label="Email" name="email" register={register} rules={{ required: true }} type="email" />
